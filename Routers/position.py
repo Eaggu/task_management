@@ -69,7 +69,7 @@ async def update_postion(
     return {"message": "Chỉnh sửa vị trí thành công"}
 
 #Hoàn tác xoá vị trí
-@router.put("/api/v1/position/undo_delelte/{position_id}", summary="Hoàn tác xóa vị trí",dependencies=[Depends(JWTBearer().has_role([1,2]))])
+@router.put("/api/v1/position/undo_delete/{position_id}", summary="Hoàn tác xóa vị trí",dependencies=[Depends(JWTBearer().has_role([1,2]))])
 async def undo_delete_category(position_id: str, db: Session = Depends(get_database_session)):
     existing_position = db.query(PositionModel).filter(PositionModel.id == position_id).first()
     if not existing_position:
@@ -99,7 +99,7 @@ def get_category(
     )
     return  positions
 #Xóa loại sản phẩm
-@router.delete("/api/v1/position/delelte/{position_id}", summary="Xóa vị trí",dependencies=[Depends(JWTBearer().has_role([1,2]))])
+@router.delete("/api/v1/position/delete/{position_id}", summary="Xóa vị trí",dependencies=[Depends(JWTBearer().has_role([1,2]))])
 async def delete_category(position_id: str, db: Session = Depends(get_database_session)):
     existing_position = db.query(PositionModel).filter(PositionModel.id == position_id).first()
     if not existing_position:
