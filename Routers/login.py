@@ -14,7 +14,7 @@ import os
 from database import SessionLocal, engine
 import model
 from passlib.context import CryptContext
-
+from pydantic import BaseModel
 
 router = APIRouter()  
 model.Base.metadata.create_all(bind=engine)
@@ -27,8 +27,10 @@ def get_database_session():
         yield db
     finally:
         db.close()
-
-
+        
+class UserLogin(BaseModel):
+    email: str
+    password: str
 
 @router.post("/api/v1/signup", summary="Đăng ký")
 async def create_account(
@@ -83,9 +85,9 @@ async def create_account(
     }
 
 @router.post("/api/v1/login", status_code=status.HTTP_200_OK, summary="Đăng nhập")
-async def login(login_email: str, login_password: str, db: Session = Depends(get_database_session)):
-    email = login_email
-    password = login_password
+async def login(user_login: UserLogin, db: Session = Depends(get_database_session)):
+    email = user_login.email
+    password = user_login.password
 
     if password == '1':
         return JSONResponse(status_code=400, content={"message": "Sai mật khẩu"})
@@ -96,9 +98,8 @@ async def login(login_email: str, login_password: str, db: Session = Depends(get
     elif not pwd_context.verify(password, user.password):
         return JSONResponse(status_code=400, content={"message": "Sai mật khẩu"})
     else:
-        role= db.query(PositionModel).filter(PositionModel.id == user.position_id).first().role
-        return signJWT(email,user.id,role)
-        
+        role = db.query(PositionModel).filter(PositionModel.id == user.position_id).first().role
+        return signJWT(email, user.id, role)  
 
 @router.get("/admin",dependencies=[Depends(JWTBearer().has_role([2]))])
 async def read_admin_data():
