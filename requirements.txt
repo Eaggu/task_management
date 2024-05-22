@@ -9,3 +9,4 @@ mysql
 mysql-connector-python
 passlib
 python-multipart
+bcrypt

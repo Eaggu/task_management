@@ -102,6 +102,16 @@ async def update_task(
 
     return {"message": "Cập nhật công việc thành công", "task_id": task.id}
 
+@router.patch("/api/v1/task/{task_id}/status", summary="Đổi trạng thái công việc",dependencies=[Depends(JWTBearer().has_role([1,2,3]))])
+async def update_task_status(task_id: str, status_id: str, db: Session = Depends(get_database_session)):
+    existing_task= db.query(TaskModel).filter(TaskModel.id == task_id).first()
+    if not existing_task:
+        raise HTTPException(status_code=404, detail=f"Công việc không tồn tại!")
+    existing_task.status_id = status_id
+
+    db.commit()
+
+    return {"message": "Thay đổi trạng thái công việc thành công"}
 
 @router.put("/api/v1/task/undo_delete/{task_id}", summary="Hoàn tác xoá công việc",dependencies=[Depends(JWTBearer().has_role([1,2,3]))])
 async def delete_task(status_id: str, db: Session = Depends(get_database_session)):

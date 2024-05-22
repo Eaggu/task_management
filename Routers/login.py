@@ -48,7 +48,6 @@ async def create_account(
         return JSONResponse(status_code=400, content={"message": "Tài khoản bị trùng"})
     elif len(password) < 6:
         return JSONResponse(status_code=400, content={"message": "Mật khẩu tối thiểu là 6 ký tự"})
-    
     hashed_password = pwd_context.hash(password)
 
     # Ensure the directory exists
@@ -99,6 +98,7 @@ async def login(db:Session=Depends(get_database_session),
     else:
         role= db.query(PositionModel).filter(PositionModel.id == user.position_id).first().role
         return signJWT(email,user.id,role)
+        
 
 @router.get("/admin",dependencies=[Depends(JWTBearer().has_role([2]))])
 async def read_admin_data():
