@@ -82,16 +82,16 @@ async def create_account(
         "data": "Tài khoản đã được tạo thành công!"
     }
 
-@router.post("/api/v1/login",status_code=status.HTTP_200_OK, summary="Đăng nhập")
-async def login(db:Session=Depends(get_database_session),
-                email:str=Form(...),
-                password:str=Form(...)
-                ):
+@router.post("/api/v1/login", status_code=status.HTTP_200_OK, summary="Đăng nhập")
+async def login(login_email: str, login_password: str, db: Session = Depends(get_database_session)):
+    email = login_email
+    password = login_password
+
     if password == '1':
         return JSONResponse(status_code=400, content={"message": "Sai mật khẩu"})
     user_exists = db.query(exists().where(UserModel.email == email)).scalar()
     user = db.query(UserModel).filter(UserModel.email == email).first()
-    if user_exists==False:
+    if not user_exists:
         return JSONResponse(status_code=400, content={"message": "Không có tài khoản"})
     elif not pwd_context.verify(password, user.password):
         return JSONResponse(status_code=400, content={"message": "Sai mật khẩu"})
