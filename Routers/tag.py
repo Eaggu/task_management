@@ -70,7 +70,7 @@ async def update_tag(
     return {"message": "Chỉnh sửa Tag thành công"}
 
 #Hoàn tác xoá đăng nhập
-@router.put("/api/v1/tag/undo_delelte/{status_id}", summary="Hoàn tác xóa Tag",dependencies=[Depends(JWTBearer().has_role([1,2]))])
+@router.put("/api/v1/tag/undo_delete/{status_id}", summary="Hoàn tác xóa Tag",dependencies=[Depends(JWTBearer().has_role([1,2]))])
 async def undo_delete_tag(status_id: str, db: Session = Depends(get_database_session)):
     existing_tag= db.query(TagModel).filter(TagModel.id == status_id).first()
     if not existing_tag:
@@ -99,7 +99,7 @@ def get_tag_by_id(
     )
     return  tag
 #Xóa loại sản phẩm
-@router.delete("/api/v1/tag/delelte/{tag_id}", summary="Xóa Tag",dependencies=[Depends(JWTBearer().has_role([1,2]))])
+@router.delete("/api/v1/tag/delete/{tag_id}", summary="Xóa Tag",dependencies=[Depends(JWTBearer().has_role([1,2]))])
 async def delete_status(tag_id: str, db: Session = Depends(get_database_session)):
     existing_status= db.query(TagModel).filter(TagModel.id == tag_id).first()
     if not existing_status:

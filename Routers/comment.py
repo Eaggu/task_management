@@ -113,7 +113,7 @@ def get_comment_by_id(
     )
     return comment
 #Xóa loại sản phẩm
-@router.delete("/api/v1/comment/delelte/{comment_id}", summary="Xóa Comment",dependencies=[Depends(JWTBearer().has_role([1]))])
+@router.delete("/api/v1/comment/delete/{comment_id}", summary="Xóa Comment",dependencies=[Depends(JWTBearer().has_role([1]))])
 async def delete_comment(comment_id:str, db: Session = Depends(get_database_session)):
     existing_comment= db.query(CommentModel).filter(CommentModel.id == comment_id).first()
 

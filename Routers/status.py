@@ -73,7 +73,7 @@ async def update_status(
     return {"message": "Chỉnh sửa trạng thái thành công"}
 
 #Hoàn tác xoá đăng nhập
-@router.put("/api/v1/status/undo_delelte/{status_id}", summary="Hoàn tác xóa trạng thái",dependencies=[Depends(JWTBearer().has_role([1]))])
+@router.put("/api/v1/status/undo_delete/{status_id}", summary="Hoàn tác xóa trạng thái",dependencies=[Depends(JWTBearer().has_role([1]))])
 async def undo_delete_status(
     status_id: str,
     db: Session = Depends(get_database_session)):
@@ -120,7 +120,7 @@ def get_status_by_id(
     )
     return  statuses
 #Xóa loại sản phẩm
-@router.delete("/api/v1/status/delelte/{status_id}", summary="Xóa trạng thái",dependencies=[Depends(JWTBearer().has_role([1]))])
+@router.delete("/api/v1/status/delete/{status_id}", summary="Xóa trạng thái",dependencies=[Depends(JWTBearer().has_role([1]))])
 async def delete_status(status_id: str, db: Session = Depends(get_database_session)):
     existing_status= db.query(StatusModel).filter(StatusModel.id == status_id).first()
     if not existing_status:

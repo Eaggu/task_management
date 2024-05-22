@@ -103,7 +103,7 @@ async def update_task(
     return {"message": "Cập nhật công việc thành công", "task_id": task.id}
 
 
-@router.put("/api/v1/task/undo_delelte/{task_id}", summary="Hoàn tác xoá công việc",dependencies=[Depends(JWTBearer().has_role([1,2,3]))])
+@router.put("/api/v1/task/undo_delete/{task_id}", summary="Hoàn tác xoá công việc",dependencies=[Depends(JWTBearer().has_role([1,2,3]))])
 async def delete_task(status_id: str, db: Session = Depends(get_database_session)):
     existing_task= db.query(TaskModel).filter(TaskModel.id == status_id).first()
     if not existing_task:
@@ -231,7 +231,7 @@ def get_task_by_id(
     }
 
 #Xóa loại sản phẩm
-@router.delete("/api/v1/task/delelte/{task_id}", summary="Xóa công việc",dependencies=[Depends(JWTBearer().has_role([1]))])
+@router.delete("/api/v1/task/delete/{task_id}", summary="Xóa công việc",dependencies=[Depends(JWTBearer().has_role([1]))])
 async def delete_task(status_id: str, db: Session = Depends(get_database_session)):
     existing_task= db.query(TaskModel).filter(TaskModel.id == status_id).first()
     if not existing_task:
